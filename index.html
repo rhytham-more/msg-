@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riyu's sorry</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Poppins:wght@300;400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(-45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeOut 3s ease-in-out 2s forwards;
+        }
+
+        .loading-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: white;
+            text-align: center;
+            animation: pulse 2s ease-in-out infinite, glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #ff6b6b; }
+            to { text-shadow: 0 0 30px #fff, 0 0 40px #fff, 0 0 50px #ff9ff3; }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out 5s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Card Styles */
+        .card {
+            width: 90%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            transform: translateY(50px);
+            animation: slideUp 1s ease-out 5.5s forwards;
+        }
+
+        @keyframes slideUp {
+            to { transform: translateY(0); }
+        }
+
+        /* Layer Styles */
+        .layer {
+            padding: 40px;
+            min-height: 500px;
+            display: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .layer.active {
+            display: block;
+            animation: layerSlide 0.8s ease-out;
+        }
+
+        @keyframes layerSlide {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Layer 1 - Hearts Animation */
+        .layer-1 {
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+        }
+
+        .layer-1::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" font-size="30" fill="%23ff6b6b">💖</text></svg>');
+            background-size: 50px 50px;
+            opacity: 0.1;
+            animation: floatingHearts 20s linear infinite;
+        }
+
+        @keyframes floatingHearts {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        /* Layer 2 - Sparkles Animation */
+        .layer-2 {
+            background: linear-gradient(135deg, #a29bfe, #fd79a8);
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 3s ease-in-out infinite;
+        }
+
+        .sparkle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 40%; left: 80%; animation-delay: 0.5s; }
+        .sparkle:nth-child(3) { top: 60%; left: 20%; animation-delay: 1s; }
+        .sparkle:nth-child(4) { top: 80%; left: 70%; animation-delay: 1.5s; }
+        .sparkle:nth-child(5) { top: 30%; left: 50%; animation-delay: 2s; }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Layer 3 - Rainbow Animation */
+        .layer-3 {
+            background: linear-gradient(135deg, #74b9ff, #00cec9);
+            position: relative;
+        }
+
+        .rainbow {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 0, 0, 0.1), 
+                rgba(255, 165, 0, 0.1), 
+                rgba(255, 255, 0, 0.1), 
+                rgba(0, 128, 0, 0.1), 
+                rgba(0, 0, 255, 0.1), 
+                rgba(75, 0, 130, 0.1), 
+                rgba(238, 130, 238, 0.1), 
+                transparent
+            );
+            animation: rainbow 4s linear infinite;
+        }
+
+        @keyframes rainbow {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Text Styles */
+        .layer-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2d3436;
+            animation: titleBounce 2s ease-out;
+        }
+
+        @keyframes titleBounce {
+            0% { transform: translateY(-50px); opacity: 0; }
+            60% { transform: translateY(10px); }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .layer-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #2d3436;
+            text-align: justify;
+            margin-bottom: 30px;
+            animation: textFade 1s ease-out 0.5s both;
+        }
+
+        @keyframes textFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Button Styles */
+        .next-btn {
+            display: block;
+            margin: 0 auto;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+            animation: buttonPulse 2s ease-in-out infinite;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+            background: linear-gradient(45deg, #ff5252, #ff7979);
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .final-btn {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            box-shadow: 0 10px 20px rgba(0, 184, 148, 0.3);
+        }
+
+        .final-btn:hover {
+            background: linear-gradient(45deg, #00a085, #00b7b8);
+            box-shadow: 0 15px 30px rgba(0, 184, 148, 0.4);
+        }
+
+        /* Floating Elements */
+        .floating-element {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(odd) {
+            animation-direction: reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .loading-text {
+                font-size: 2.5rem;
+            }
+            
+            .layer {
+                padding: 20px;
+                min-height: 400px;
+            }
+            
+            .layer-title {
+                font-size: 2rem;
+            }
+            
+            .layer-text {
+                font-size: 1rem;
+            }
+        }
+
+        @keyframes sparkleEffect {
+            0% { opacity: 1; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
+            100% { opacity: 0; transform: scale(0) rotate(360deg); }
+        }
+
+        /* Background Floating Animations */
+        .background-animations {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .floating-bg-element {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.7;
+            animation-duration: 15s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+
+        /* Butterfly Animations */
+        .butterfly {
+            animation-name: butterflyFly;
+            font-size: 2.5rem;
+        }
+
+        .butterfly:nth-child(2n) {
+            animation-name: butterflyFlyReverse;
+            animation-duration: 20s;
+        }
+
+        @keyframes butterflyFly {
+            0% {
+                transform: translateX(-100px) translateY(100vh) rotate(0deg);
+            }
+            25% {
+                transform: translateX(25vw) translateY(75vh) rotate(90deg);
+            }
+            50% {
+                transform: translateX(50vw) translateY(50vh) rotate(180deg);
+            }
+            75% {
+                transform: translateX(75vw) translateY(25vh) rotate(270deg);
+            }
+            100% {
+                transform: translateX(100vw) translateY(-100px) rotate(360deg);
+            }
+        }
+
+        @keyframes butterflyFlyReverse {
+            0% {
+                transform: translateX(100vw) translateY(-100px) rotate(0deg);
+            }
+            25% {
+                transform: translateX(75vw) translateY(25vh) rotate(-90deg);
+            }
+            50% {
+                transform: translateX(50vw) translateY(50vh) rotate(-180deg);
+            }
+            75% {
+                transform: translateX(25vw) translateY(75vh) rotate(-270deg);
+            }
+            100% {
+                transform: translateX(-100px) translateY(100vh) rotate(-360deg);
+            }
+        }
+
+        /* Heart Animations */
+        .heart {
+            animation-name: heartFloat;
+            color: #ff6b6b;
+        }
+
+        .heart:nth-child(3n) {
+            animation-name: heartFloatSide;
+            animation-duration: 12s;
+        }
+
+        @keyframes heartFloat {
+            0% {
+                transform: translateY(100vh) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes heartFloatSide {
+            0% {
+                transform: translateX(-100px) translateY(50vh) scale(0.8);
+                opacity: 0;
+            }
+            50% {
+                transform: translateX(50vw) translateY(30vh) scale(1.2);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateX(100vw) translateY(70vh) scale(0.6);
+                opacity: 0;
+            }
+        }
+
+        /* Chocolate/Candy Animations */
+        .chocolate {
+            animation-name: chocolateBounce;
+            color: #8b4513;
+        }
+
+        @keyframes chocolateBounce {
+            0% {
+                transform: translateX(-50px) translateY(100vh) rotate(0deg);
+            }
+            25% {
+                transform: translateX(20vw) translateY(80vh) rotate(90deg);
+            }
+            50% {
+                transform: translateX(40vw) translateY(60vh) rotate(180deg);
+            }
+            75% {
+                transform: translateX(60vw) translateY(40vh) rotate(270deg);
+            }
+            100% {
+                transform: translateX(100vw) translateY(-50px) rotate(360deg);
+            }
+        }
+
+        /* Flower Animations */
+        .flower {
+            animation-name: flowerSway;
+            color: #fd79a8;
+        }
+
+        @keyframes flowerSway {
+            0% {
+                transform: translateY(100vh) translateX(0px) rotate(0deg);
+            }
+            25% {
+                transform: translateY(75vh) translateX(50px) rotate(10deg);
+            }
+            50% {
+                transform: translateY(50vh) translateX(-30px) rotate(-5deg);
+            }
+            75% {
+                transform: translateY(25vh) translateX(40px) rotate(8deg);
+            }
+            100% {
+                transform: translateY(-100px) translateX(0px) rotate(0deg);
+            }
+        }
+
+        /* Star Animations */
+        .star {
+            animation-name: starTwinkle;
+            color: #ffeaa7;
+        }
+
+        @keyframes starTwinkle {
+            0% {
+                transform: translateX(100vw) translateY(20vh) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            25% {
+                transform: translateX(75vw) translateY(40vh) scale(1.5) rotate(90deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translateX(50vw) translateY(60vh) scale(0.8) rotate(180deg);
+                opacity: 0.8;
+            }
+            75% {
+                transform: translateX(25vw) translateY(80vh) scale(1.2) rotate(270deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-100px) translateY(100vh) scale(0) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Gift Box Animations */
+        .gift {
+            animation-name: giftFloat;
+            color: #a29bfe;
+        }
+
+        @keyframes giftFloat {
+            0% {
+                transform: translateY(-100px) translateX(10vw) rotate(0deg);
+            }
+            50% {
+                transform: translateY(50vh) translateX(90vw) rotate(180deg);
+            }
+            100% {
+                transform: translateY(100vh) translateX(10vw) rotate(360deg);
+            }
+        }
+
+        /* Rose Animations */
+        .rose {
+            animation-name: roseSpin;
+            color: #e17055;
+        }
+
+        @keyframes roseSpin {
+            0% {
+                transform: translateX(-100px) translateY(30vh) rotate(0deg) scale(0.5);
+            }
+            33% {
+                transform: translateX(33vw) translateY(10vh) rotate(120deg) scale(1.2);
+            }
+            66% {
+                transform: translateX(66vw) translateY(70vh) rotate(240deg) scale(0.8);
+            }
+            100% {
+                transform: translateX(100vw) translateY(50vh) rotate(360deg) scale(1);
+            }
+        }
+
+        /* Cupid Arrow Animation */
+        .arrow {
+            animation-name: arrowShoot;
+            color: #ff7675;
+            font-size: 1.5rem;
+        }
+
+        @keyframes arrowShoot {
+            0% {
+                transform: translateX(-100px) translateY(50vh) rotate(-45deg);
+            }
+            100% {
+                transform: translateX(100vw) translateY(30vh) rotate(-45deg);
+            }
+        }
+
+        /* Ring Animation */
+        .ring {
+            animation-name: ringSparkle;
+            color: #fdcb6e;
+        }
+
+        @keyframes ringSparkle {
+            0% {
+                transform: translateY(100vh) scale(0.3) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                transform: translateY(50vh) scale(1.5) rotate(180deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(0.3) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Background Floating Animations - Avoiding Message Box */
+        .background-animations {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .floating-bg-element {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.7;
+            animation-duration: 15s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+
+        /* Blooming Flowers Background */
+        .blooming-flower {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0;
+            animation: bloomAndFade 8s ease-in-out infinite;
+        }
+
+        @keyframes bloomAndFade {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            25% {
+                transform: scale(1.2) rotate(90deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(1) rotate(180deg);
+                opacity: 1;
+            }
+            75% {
+                transform: scale(1.1) rotate(270deg);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(0.8) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Different blooming patterns */
+        .blooming-flower:nth-child(2n) {
+            animation: bloomPulse 6s ease-in-out infinite;
+        }
+
+        .blooming-flower:nth-child(3n) {
+            animation: bloomSpiral 10s ease-in-out infinite;
+        }
+
+        @keyframes bloomPulse {
+            0%, 100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bloomSpiral {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            30% {
+                transform: scale(1) rotate(180deg);
+                opacity: 0.8;
+            }
+            70% {
+                transform: scale(1.2) rotate(540deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Butterfly Animations - Avoiding center */
+        .butterfly {
+            animation-name: butterflyFlyAround;
+            font-size: 2.5rem;
+        }
+
+        .butterfly:nth-child(2n) {
+            animation-name: butterflyFlyAroundReverse;
+            animation-duration: 20s;
+        }
+
+        @keyframes butterflyFlyAround {
+            0% {
+                transform: translateX(-100px) translateY(10vh);
+            }
+            25% {
+                transform: translateX(20vw) translateY(5vh);
+            }
+            50% {
+                transform: translateX(80vw) translateY(15vh);
+            }
+            75% {
+                transform: translateX(90vw) translateY(85vh);
+            }
+            100% {
+                transform: translateX(-100px) translateY(90vh);
+            }
+        }
+
+        @keyframes butterflyFlyAroundReverse {
+            0% {
+                transform: translateX(100vw) translateY(90vh);
+            }
+            25% {
+                transform: translateX(80vw) translateY(85vh);
+            }
+            50% {
+                transform: translateX(20vw) translateY(95vh);
+            }
+            75% {
+                transform: translateX(10vw) translateY(5vh);
+            }
+            100% {
+                transform: translateX(100vw) translateY(10vh);
+            }
+        }
+
+        /* Heart Animations - Floating on sides */
+        .heart {
+            animation-name: heartFloatSides;
+            color: #ff6b6b;
+        }
+
+        .heart:nth-child(3n) {
+            animation-name: heartFloatTop;
+            animation-duration: 12s;
+        }
+
+        @keyframes heartFloatSides {
+            0% {
+                transform: translateX(-50px) translateY(100vh) scale(0.5);
+                opacity: 0;
+            }
+            25% {
+                transform: translateX(10vw) translateY(80vh) scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateX(5vw) translateY(20vh) scale(1.2);
+                opacity: 1;
+            }
+            75% {
+                transform: translateX(95vw) translateY(10vh) scale(0.8);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateX(100vw) translateY(-50px) scale(0.3);
+                opacity: 0;
+            }
+        }
+
+        @keyframes heartFloatTop {
+            0% {
+                transform: translateX(100vw) translateY(-50px) scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: translateX(50vw) translateY(5vh) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-50px) translateY(100vh) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* Other elements - staying on edges */
+        .chocolate, .flower, .star, .gift, .rose, .arrow, .ring {
+            animation-name: floatAroundEdges;
+        }
+
+        @keyframes floatAroundEdges {
+            0% {
+                transform: translateX(-100px) translateY(20vh) rotate(0deg);
+            }
+            25% {
+                transform: translateX(15vw) translateY(5vh) rotate(90deg);
+            }
+            50% {
+                transform: translateX(85vw) translateY(10vh) rotate(180deg);
+            }
+            75% {
+                transform: translateX(90vw) translateY(90vh) rotate(270deg);
+            }
+            100% {
+                transform: translateX(-100px) translateY(95vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animations -->
+    <div class="background-animations">
+        <!-- Blooming Flowers scattered across background -->
+        <div class="blooming-flower" style="top: 5%; left: 5%; animation-delay: 0s;">🌸</div>
+        <div class="blooming-flower" style="top: 8%; left: 15%; animation-delay: 1s;">🌺</div>
+        <div class="blooming-flower" style="top: 12%; left: 8%; animation-delay: 2s;">🌻</div>
+        <div class="blooming-flower" style="top: 15%; left: 25%; animation-delay: 3s;">🌷</div>
+        <div class="blooming-flower" style="top: 18%; left: 5%; animation-delay: 4s;">🌹</div>
+        <div class="blooming-flower" style="top: 22%; left: 18%; animation-delay: 5s;">🌼</div>
+        <div class="blooming-flower" style="top: 25%; left: 10%; animation-delay: 6s;">🌸</div>
+        <div class="blooming-flower" style="top: 28%; left: 2%; animation-delay: 7s;">🌺</div>
+        
+        <!-- Right side blooming flowers -->
+        <div class="blooming-flower" style="top: 5%; right: 5%; animation-delay: 1s;">🌻</div>
+        <div class="blooming-flower" style="top: 8%; right: 15%; animation-delay: 2s;">🌷</div>
+        <div class="blooming-flower" style="top: 12%; right: 8%; animation-delay: 3s;">🌹</div>
+        <div class="blooming-flower" style="top: 15%; right: 25%; animation-delay: 4s;">🌼</div>
+        <div class="blooming-flower" style="top: 18%; right: 5%; animation-delay: 5s;">🌸</div>
+        <div class="blooming-flower" style="top: 22%; right: 18%; animation-delay: 6s;">🌺</div>
+        <div class="blooming-flower" style="top: 25%; right: 10%; animation-delay: 7s;">🌻</div>
+        <div class="blooming-flower" style="top: 28%; right: 2%; animation-delay: 0s;">🌷</div>
+        
+        <!-- Bottom blooming flowers -->
+        <div class="blooming-flower" style="bottom: 5%; left: 8%; animation-delay: 2s;">🌹</div>
+        <div class="blooming-flower" style="bottom: 8%; left: 20%; animation-delay: 3s;">🌼</div>
+        <div class="blooming-flower" style="bottom: 12%; left: 5%; animation-delay: 4s;">🌸</div>
+        <div class="blooming-flower" style="bottom: 15%; left: 25%; animation-delay: 5s;">🌺</div>
+        <div class="blooming-flower" style="bottom: 18%; left: 12%; animation-delay: 6s;">🌻</div>
+        <div class="blooming-flower" style="bottom: 22%; left: 3%; animation-delay: 7s;">🌷</div>
+        
+        <div class="blooming-flower" style="bottom: 5%; right: 8%; animation-delay: 3s;">🌹</div>
+        <div class="blooming-flower" style="bottom: 8%; right: 20%; animation-delay: 4s;">🌼</div>
+        <div class="blooming-flower" style="bottom: 12%; right: 5%; animation-delay: 5s;">🌸</div>
+        <div class="blooming-flower" style="bottom: 15%; right: 25%; animation-delay: 6s;">🌺</div>
+        <div class="blooming-flower" style="bottom: 18%; right: 12%; animation-delay: 7s;">🌻</div>
+        <div class="blooming-flower" style="bottom: 22%; right: 3%; animation-delay: 0s;">🌷</div>
+        
+        <!-- Top edge blooming flowers -->
+        <div class="blooming-flower" style="top: 2%; left: 30%; animation-delay: 1s;">🌸</div>
+        <div class="blooming-flower" style="top: 2%; left: 45%; animation-delay: 3s;">🌺</div>
+        <div class="blooming-flower" style="top: 2%; left: 60%; animation-delay: 5s;">🌻</div>
+        <div class="blooming-flower" style="top: 2%; left: 75%; animation-delay: 7s;">🌷</div>
+        
+        <!-- Bottom edge blooming flowers -->
+        <div class="blooming-flower" style="bottom: 2%; left: 30%; animation-delay: 2s;">🌹</div>
+        <div class="blooming-flower" style="bottom: 2%; left: 45%; animation-delay: 4s;">🌼</div>
+        <div class="blooming-flower" style="bottom: 2%; left: 60%; animation-delay: 6s;">🌸</div>
+        <div class="blooming-flower" style="bottom: 2%; left: 75%; animation-delay: 0s;">🌺</div>
+    
+    <!-- Floating elements that avoid center -->
+    <!-- Butterflies -->
+    <div class="floating-bg-element butterfly" style="left: 5%; animation-delay: 0s;">🦋</div>
+    <div class="floating-bg-element butterfly" style="left: 85%; animation-delay: 3s;">🦋</div>
+    <div class="floating-bg-element butterfly" style="left: 10%; animation-delay: 6s;">🦋</div>
+    <div class="floating-bg-element butterfly" style="left: 90%; animation-delay: 9s;">🦋</div>
+    
+    <!-- Hearts floating on edges -->
+    <div class="floating-bg-element heart" style="left: 2%; animation-delay: 1s;">💖</div>
+    <div class="floating-bg-element heart" style="left: 8%; animation-delay: 4s;">❤️</div>
+    <div class="floating-bg-element heart" style="right: 2%; animation-delay: 7s;">💕</div>
+    <div class="floating-bg-element heart" style="right: 8%; animation-delay: 2s;">💗</div>
+    <div class="floating-bg-element heart" style="left: 15%; animation-delay: 5s;">💝</div>
+    <div class="floating-bg-element heart" style="right: 15%; animation-delay: 8s;">💘</div>
+    
+    <!-- Other romantic elements on edges -->
+    <div class="floating-bg-element chocolate" style="left: 5%; animation-delay: 2s;">🍫</div>
+    <div class="floating-bg-element chocolate" style="right: 5%; animation-delay: 5s;">🍬</div>
+    <div class="floating-bg-element chocolate" style="left: 12%; animation-delay: 8s;">🧁</div>
+    <div class="floating-bg-element chocolate" style="right: 12%; animation-delay: 1s;">🍭</div>
+    
+    <div class="floating-bg-element star" style="left: 3%; animation-delay: 2s;">⭐</div>
+    <div class="floating-bg-element star" style="right: 3%; animation-delay: 5s;">✨</div>
+    <div class="floating-bg-element star" style="left: 18%; animation-delay: 8s;">🌟</div>
+    <div class="floating-bg-element star" style="right: 18%; animation-delay: 3s;">💫</div>
+    
+    <div class="floating-bg-element gift" style="left: 7%; animation-delay: 4s;">🎁</div>
+    <div class="floating-bg-element gift" style="right: 7%; animation-delay: 7s;">🎀</div>
+    <div class="floating-bg-element gift" style="left: 20%; animation-delay: 2s;">🎊</div>
+    <div class="floating-bg-element gift" style="right: 20%; animation-delay: 6s;">🎉</div>
+    
+    <!-- Additional romantic elements -->
+    <div class="floating-bg-element ring" style="left: 4%; animation-delay: 5s;">💍</div>
+    <div class="floating-bg-element ring" style="right: 4%; animation-delay: 9s;">💍</div>
+    <div class="floating-bg-element arrow" style="top: 10%; animation-delay: 3s;">💘</div>
+    <div class="floating-bg-element arrow" style="bottom: 10%; animation-delay: 8s;">💘</div>
+</div>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loading-text">Sorry for Everything</div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="card">
+            <!-- Layer 1 -->
+            <div class="layer layer-1 active" id="layer1">
+                <div class="floating-element" style="top: 10%; right: 10%;">🌹</div>
+                <div class="floating-element" style="bottom: 15%; left: 15%;">💕</div>
+                
+                <h2 class="layer-title">My Humble Greetings</h2>
+                <p class="layer-text">
+                    Hello It's a humble message of newly changed riyu for prakrati, itne dino se hum aapko ek hi baat bolte bolte thak gye par app humari baat pr dhyn hi ni de paa rahe hai aap hume iss qadar ignore krre jese aap 5 salo pehle kiya krte the iss bar to shisui ki I'd na rahi jisse hum aapko chup chup ke dekha krte par han snap , insta , whatsapp, call, gmail or har jgh aap hume hata kr b pata ni kese sapno me aa jati hai , 
+                    Chalo yeh baat rahi purani haar bar aapke paas ro kar aana aapke resolve ko kam Krna yeh shoba ni deta hume , me khud janta hu prakrati ko usse bilkul acha ni lagra h mujhse rude hokr ya mujhse durr jakr vo khud pareshan ho jati h yeh sab krk pr usse Krna pdta h usse eh realisation nahi h yeh temporary sukoon jo milra h without me jab vo actually realize kregi to vo chiz kitni bhari pdti h ek insan pr , agar aap abhi bhi humse rude hokar hume ignore krk khush hai to please aage a message dekhiye.... 
+                </p>
+                <button class="next-btn" onclick="nextLayer(2)">Continue Reading</button>
+            </div>
+
+            <!-- Layer 2 -->
+            <div class="layer layer-2" id="layer2">
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                <div class="sparkle"></div>
+                
+                <div class="floating-element" style="top: 20%; left: 10%;">✨</div>
+                <div class="floating-element" style="bottom: 20%; right: 10%;">🦋</div>
+                
+                <h2 class="layer-title">From recent missunderstandings </h2>
+                <p class="layer-text">
+                    Prakrati tumhe yaad hi hoga vo din jiss din me udhr waterpark aya tha jis tarah behaviour tha tumhara uss din mera actually heartbreak 💔 hua tha kyu pehele mujhe hatho se banakr khilate thi , mere liye watermelon or santra chil kr laati thi , mere sath adha indore itni jgh ghum Li infact yaadein to itni cute cute ki puri zindagi usse baith kr muskura saku pr fir uss din ese fek diya tha jese yeh stranger itna bura ho ki he needs all the hate of the world , mene accept krliya decision or din ke bad se aaj tak me yehi sochta kuch majburi hogi uski voto bhot cute h esei meko hurt ni kregi or tumhare dost unko to kya khelene meko to dil se ni lagta prakrati ke jeevan me koi or aya hoga pr agr prakrati rasaniya esei kisi ke sath waterpark ni jati or mann b lo yeh baat to unki adatein tumko pata h samne wale ka b past tha na koi usko b to choda tha na to vese kese tumhare liye sahi rahega tum b agr koi ata h vese to ayega ni pr fir b vo kuch time ka attraction hoga fir yto vo bore ho jayega ya tum , 5 sal bitana alag hota h kisi ke sath kuch to baat hogi na log misal dene lage jiski nazar b lag lgyi , aage or samne se to sab acha rkhte h mtlb dekhne ke bad tujhe pata h log kese badalenge kya pta worst nikal jaye teri meri baat alag thi we don't have any one before mitti ki khusbu bas peheli barish me aati dusri me nahi , merme kafi kamiya h pr mene apna ego self respect or personality ek ke liye change Kiya h u see vo bhot mean krti hogi mere liye me esa kisi or ke liye nahi rahunga or koi or koi ab krk bata de merse acha treat tumko 😅 ( continue please...)
+                </p>
+                <button class="next-btn" onclick="nextLayer(3)">One More Thing</button>
+            </div>
+
+            <!-- Layer 3 -->
+            <div class="layer layer-3" id="layer3">
+                <div class="rainbow"></div>
+                
+                <div class="floating-element" style="top: 15%; right: 15%;">🌈</div>
+                <div class="floating-element" style="bottom: 10%; left: 20%;">💖</div>
+                
+                <h2 class="layer-title">Message for future</h2>
+                <p class="layer-text">
+             Iss sab ke bad me tere paas aya apni sari galti accept krk apni sari kamiyo ko bharne khud se promise Kiya tha mene Aaj ke bad kabhi hurt ni hone dunga usko , Relationship ke liye to me wapis aya b nahi tha nahi merme himmat thi uss din ke bad relationship ki commitment dene ki or tera decision b accept Krliya tha mene , To kya chahta hu me .... Mene promise Kiya tha placement lagegi apni sath me mehnat krenge ache se krenge me har possible try krunga tere liye bhale tu rahe na rahe because it was my last wish kuch b hota tere mere beech yeh chiz ni badal skta tha me ki teri me help krunga chahe jo ho jaye bs usski ke sath ek baat thi tu ache se baat krle kuch samay ka b tera sath mere me nayi energy dal deta tha smile rehti thi me kisi or to date ni krunga kyuki usme me prakrati dhundne ki koshish krunga vo meko ni milegi usse me uski or meri dono ki life krb krunga to me akele hi thik hu bas teri purani yaadon me and for u my girl tu b janti h yeh sab tere liye kitna bhari padhra h tujhe b takleef hori h or tu b janti h yeh hypothetical talking stage wale , dost yar inn sab ko terse ek had tak matlb rakenge kuch mahine me sab change ho jayega par vo rahega jo saalo se tha tere sath teri block list me , uss din meko pukaregi tab bhi tere sath payegi mujhe (kyo) kyuki I actually loved u I actually care about u or yeh caring kabhi bhi band ni hogi mere marne ke sath hi band hogi....To kya bolti h meri fidus achate kesa rahega yeh restart without ek dusre ka pressure without commitment bas Good moments with each other, ek dusre ki strength banna rudely baatein ignore sab chod kr sath me focus krk fadne ki yeh duniya kasam se dekhti reh jayegi jo apan ukhad lenge , me focus krra hu khud pr placement pr sab krta hu Roz me pr meri mental state kharab h or vo tune thik krdi I swear no one gonna stop me , or me meto khada hu tere sath or teko fir koi hara de yeh kisi okat ni , so my 5 years old companion this is message only for u, kal mera result h ik tu mere liye prayer kregi hi pr ho sake to meko unblock Krna me sabse pehle tujhe call krk yeh khushkhabri dena chahta hu 😄
+                </p>
+                <button class="next-btn final-btn" onclick="showFinalMessage()">I Miss You</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function nextLayer(layerNumber) {
+            // Hide current layer with animation
+            const currentLayer = document.querySelector('.layer.active');
+            currentLayer.style.animation = 'layerSlide 0.8s ease-out reverse';
+            
+            setTimeout(() => {
+                currentLayer.classList.remove('active');
+                
+                // Show next layer
+                const nextLayer = document.getElementById(`layer${layerNumber}`);
+                nextLayer.classList.add('active');
+            }, 400);
+        }
+
+        function showFinalMessage() {
+            // Create final overlay
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 2000;
+                opacity: 0;
+                transition: opacity 1s ease;
+            `;
+            
+            const finalText = document.createElement('div');
+            finalText.innerHTML = `
+                <div style="
+                    font-family: 'Dancing Script', cursive;
+                    font-size: 4rem;
+                    color: white;
+                    text-align: center;
+                    animation: pulse 2s ease-in-out infinite, glow 2s ease-in-out infinite alternate;
+                ">
+                    Thank You for Reading ❤️
+                    <br>
+                    <span style="font-size: 2rem; display: block; margin-top: 20px;">
+                        I Miss You So Much
+                    </span>
+                </div>
+            `;
+            
+            overlay.appendChild(finalText);
+            document.body.appendChild(overlay);
+            
+            // Fade in the overlay
+            setTimeout(() => {
+                overlay.style.opacity = '1';
+            }, 100);
+            
+            // Add click to restart
+            overlay.addEventListener('click', () => {
+                location.reload();
+            });
+        }
+
+        // Add some interactive sparkles on mouse move
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() > 0.9) {
+                createSparkle(e.clientX, e.clientY);
+            }
+        });
+
+        function createSparkle(x, y) {
+            const sparkle = document.createElement('div');
+            sparkle.style.cssText = `
+                position: fixed;
+                left: ${x}px;
+                top: ${y}px;
+                width: 6px;
+                height: 6px;
+                background: white;
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 1000;
+                animation: sparkleEffect 1s ease-out forwards;
+            `;
+            
+            document.body.appendChild(sparkle);
+            
+            setTimeout(() => {
+                sparkle.remove();
+            }, 1000);
+        }
+
+        // Add sparkle effect keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes sparkleEffect {
+                0% { opacity: 1; transform: scale(0) rotate(0deg); }
+                50% { opacity: 1; transform: scale(1) rotate(180deg); }
+                100% { opacity: 0; transform: scale(0) rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
